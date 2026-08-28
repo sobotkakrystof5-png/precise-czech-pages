@@ -31,7 +31,8 @@ function Kontakt() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const raw = {
       jmeno: String(fd.get("jmeno") ?? ""),
       email: String(fd.get("email") ?? ""),
@@ -56,12 +57,14 @@ function Kontakt() {
     setStav("odesila");
     try {
       await odeslat({ data: parsed.data });
+      form.reset();
       setStav("hotovo");
-      e.currentTarget.reset();
-    } catch {
+    } catch (err) {
+      console.error(err);
       setStav("chyba");
     }
   }
+
 
   const inputClass =
     "w-full border-0 border-b border-input bg-transparent py-2.5 text-sm outline-none transition-colors focus:border-accent";
